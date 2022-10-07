@@ -13,8 +13,23 @@ body {
 }
 
 #search-box {
-  font: inherit;
-  padding: 8px;
-  max-width: 320px;
   margin-bottom: 16px;
+}
+
+#search-box,
+.country-list,
+.country-info {
+  width: 20rem
+}
+
+.country-list .list-group-item {
+  display: flex;
+}
+
+.country-list .list-group-item img {
+  margin-right: 10px;
+}
+
+.country-list .list-group-item-action {
+  cursor: pointer;
 }
