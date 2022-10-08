@@ -10,16 +10,19 @@ const MAX_COUNTRIES_QTY = 10;
 const onSearch = ({ target }) => {
   const searchQuery = target.value.trim();
 
-  resetMarkup();
-  target.value = searchQuery;
-  searchQuery && fetchCountries(searchQuery).then(onSuccess).catch(onFailure);
+  if (!searchQuery) {
+    target.value = searchQuery;
+    return clearAllMarkup();
+  }
+
+  fetchCountries(searchQuery).then(onSuccess).catch(onFailure);
 };
 
 const onClick = ({ target }) => {
   if (target.nodeName !== 'UL') {
     const searchQuery = target.dataset.name;
 
-    resetMarkup();
+    clearAllMarkup();
     refs.searchBox.value = searchQuery;
     fetchCountries(searchQuery, true).then(onSuccess).catch(onFailure);
   }
@@ -32,15 +35,18 @@ function onSuccess(data) {
   const countriesQty = data.length;
 
   if (countriesQty > MAX_COUNTRIES_QTY) {
+    clearAllMarkup();
     return Notify.info(
       'Too many matches found. Please enter a more specific name.'
     );
   }
 
   if (countriesQty > 1) {
+    refs.countryInfo.innerHTML = '';
     return renderCountryList(data);
   }
 
+  refs.countryList.innerHTML = '';
   renderCountryInfo(data[0]);
 }
 
@@ -48,7 +54,7 @@ function onFailure() {
   Notify.failure('Oops, there is no country with that name');
 }
 
-function resetMarkup() {
+function clearAllMarkup() {
   refs.countryInfo.innerHTML = '';
   refs.countryList.innerHTML = '';
 }
